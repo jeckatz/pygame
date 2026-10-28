@@ -484,7 +484,7 @@ HTML_TEMPLATE = """
     </main>
 
     <footer class="text-center py-4 text-xs font-bold text-slate-500 bg-white/60 border-t border-amber-200">
-        </> by <a href="fb.com/xjeckatz" target="newTab">Jeckatz</a>
+        </> by <a href="https://www.facebook.com/xjeckatz/" target="newTab">Jeckatz</a>
     </footer>
 
     <script>
