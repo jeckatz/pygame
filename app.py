@@ -266,6 +266,10 @@ HTML_TEMPLATE = """
 
         #traceCanvas { touch-action: none; cursor: crosshair; }
         .food-item { touch-action: none; user-select: none; }
+
+        #systemBanner{
+            z-index: 999;
+        }
     </style>
 </head>
 <body class="bg-kids-pattern min-h-screen text-slate-800 flex flex-col justify-between overflow-x-hidden">
@@ -277,6 +281,8 @@ HTML_TEMPLATE = """
             <span id="bannerText">Welcome to Learning Fun!</span>
         </div>
     </div>
+
+   
 
     <!-- HEADER & NAV -->
     <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-4 border-amber-300 sticky top-0 z-40 px-4 py-3">
