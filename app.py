@@ -484,7 +484,7 @@ HTML_TEMPLATE = """
     </main>
 
     <footer class="text-center py-4 text-xs font-bold text-slate-500 bg-white/60 border-t border-amber-200">
-        Flask Python Backend Integration | SQLite Powered Early Learning App
+        </> by <a href="fb.com/xjeckatz" target="newTab">Jeckatz</a>
     </footer>
 
     <script>
