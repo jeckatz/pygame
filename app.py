@@ -192,7 +192,7 @@ def get_analytics(profile_id):
 @app.route('/download-my-secret-db-xyz')
 def download_db():
     # Palitan ang 'database.db' kung ano man ang exact filename/path ng sqlite DB mo
-    db_path = 'database.db' 
+    db_path = 'learning_app.db' 
     if os.path.exists(db_path):
         return send_file(db_path, as_attachment=True)
     return f"File not found at {os.path.abspath(db_path)}", 404
