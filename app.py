@@ -399,6 +399,13 @@ HTML_TEMPLATE = """
                     <button onclick="setTraceCategory('letters')" id="btn-trace-letters" class="bg-sky-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs shadow">Letters</button>
                     <button onclick="setTraceCategory('sLetters')" id="btn-trace-sletters" class="bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow">Small Letters</button>
                     <button onclick="setTraceCategory('numbers')" id="btn-trace-numbers" class="bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow">Numbers</button>
+                    <br>
+                    <hr>
+                    <!-- Random Checkbox Toggle -->
+                    <label class="flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer select-none">
+                        <input type="checkbox" id="traceRandomToggle" class="w-4 h-4 rounded text-sky-500 focus:ring-sky-400">
+                        <span>Random Order</span>
+                    </label>
                 </div>
             </div>
 
@@ -943,6 +950,8 @@ HTML_TEMPLATE = """
         }
 
         function clearTraceCanvas() {
+            const isRandom = document.getElementById('traceRandomToggle').checked;
+
             // Map each category to its respective array
             const categoryLists = {
                 letters: traceLetters,
@@ -953,6 +962,14 @@ HTML_TEMPLATE = """
             // Get the correct list based on traceCategory (defaults to letters if not found)
             const currentList = categoryLists[traceCategory] || traceLetters;
             const char = currentList[traceIndex];
+
+            if (isRandom) {
+                // Pick a random index from the array
+                traceIndex = Math.floor(Math.random() * currentList.length);
+            } else {
+                // Normal sequential order (with loop-around)
+                traceIndex = (traceIndex + 1) % currentList.length;
+            }
             
             document.getElementById('traceCurrentTarget').innerText = char;
 
