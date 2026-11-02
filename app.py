@@ -966,10 +966,7 @@ HTML_TEMPLATE = """
             if (isRandom) {
                 // Pick a random index from the array
                 traceIndex = Math.floor(Math.random() * currentList.length);
-            } else {
-                // Normal sequential order (with loop-around)
-                traceIndex = (traceIndex + 1) % currentList.length;
-            }
+            } 
             
             document.getElementById('traceCurrentTarget').innerText = char;
 
