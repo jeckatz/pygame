@@ -270,6 +270,24 @@ HTML_TEMPLATE = """
         #systemBanner{
             z-index: 999;
         }
+
+        /* Mobile menu smooth collapse & expand animation */
+        @media (max-width: 767px) {
+            #appNav {
+                max-height: 0;
+                opacity: 0;
+                overflow: hidden;
+                transition: max-height 0.35s ease-in-out, opacity 0.3s ease-in-out, margin-top 0.3s ease-in-out;
+                margin-top: 0 !important;
+            }
+            #appNav.open {
+                max-height: 350px; /* Adjust if you add more buttons */
+                opacity: 1;
+                margin-top: 0.75rem !important; /* matches mt-3 */
+            }
+        }
+
+
     </style>
 </head>
 <body class="bg-kids-pattern min-h-screen text-slate-800 flex flex-col justify-between overflow-x-hidden">
@@ -286,7 +304,8 @@ HTML_TEMPLATE = """
 
     <!-- HEADER & NAV -->
     <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-4 border-amber-300 sticky top-0 z-40 px-4 py-3">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+        <div class="max-w-6xl mx-auto flex flex-wrap md:flex-row items-center justify-between gap-3">
+            <!-- Logo & Title -->
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 bg-amber-400 rounded-full flex items-center justify-center text-white text-2xl shadow-md transform -rotate-6">🌟</div>
                 <div>
@@ -295,7 +314,8 @@ HTML_TEMPLATE = """
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
+            <!-- Controls & Hamburger Button -->
+            <div class="flex items-center gap-3 ml-auto md:ml-0">
                 <div id="profileSelectContainer" class="hidden flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-2xl border-2 border-amber-300">
                     <span id="activeAvatar" class="text-2xl">🦁</span>
                     <select id="profileDropdown" onchange="changeProfile()" class="bg-transparent font-bold text-amber-800 text-sm focus:outline-none cursor-pointer"></select>
@@ -309,10 +329,18 @@ HTML_TEMPLATE = """
                 <button id="authBtn" onclick="openAuthModal()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-4 py-1.5 rounded-xl shadow border-b-4 border-indigo-700 text-sm">
                     🔑 Login
                 </button>
+
+                <!-- Hamburger Button (Mobile Only) -->
+                <button id="menuToggleBtn" onclick="toggleMenu()" class="md:hidden p-2 rounded-xl bg-amber-100 border-2 border-amber-300 text-amber-800 focus:outline-none transition-transform active:scale-95" aria-label="Toggle Menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
             </div>
         </div>
 
-        <nav id="appNav" class="max-w-4xl mx-auto mt-3 flex flex-wrap justify-center gap-2">
+        <!-- Collapsible Navigation with Smooth Animation -->
+        <nav id="appNav" class="md:flex max-w-4xl mx-auto flex flex-wrap justify-center gap-2">
             <button onclick="switchTab('balloon')" id="tab-balloon" class="tab-btn bg-pink-500 text-white font-bold px-4 py-2 rounded-2xl shadow border-b-4 border-pink-700 hover:brightness-110 text-sm">🎈 Balloon Pop</button>
             <button onclick="switchTab('safari')" id="tab-safari" class="tab-btn bg-emerald-500 text-white font-bold px-4 py-2 rounded-2xl shadow border-b-4 border-emerald-700 hover:brightness-110 text-sm">🦁 Counting Safari</button>
             <button onclick="switchTab('trace')" id="tab-trace" class="tab-btn bg-sky-500 text-white font-bold px-4 py-2 rounded-2xl shadow border-b-4 border-sky-700 hover:brightness-110 text-sm">✏️ Trace & Learn</button>
@@ -1185,6 +1213,11 @@ HTML_TEMPLATE = """
                 `;
                 container.appendChild(badge);
             });
+        }
+
+        function toggleMenu() {
+            const nav = document.getElementById('appNav');
+            nav.classList.toggle('open');
         }
     </script>
 </body>
