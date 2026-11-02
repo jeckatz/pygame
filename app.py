@@ -397,6 +397,7 @@ HTML_TEMPLATE = """
                 </div>
                 <div class="flex gap-2">
                     <button onclick="setTraceCategory('letters')" id="btn-trace-letters" class="bg-sky-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs shadow">Letters</button>
+                    <button onclick="setTraceCategory('sLetters')" id="btn-trace-sletters" class="bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow">Small Letters</button>
                     <button onclick="setTraceCategory('numbers')" id="btn-trace-numbers" class="bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow">Numbers</button>
                 </div>
             </div>
@@ -845,6 +846,12 @@ HTML_TEMPLATE = """
             const options = document.getElementById('safariOptions');
             display.innerHTML = ''; options.innerHTML = '';
 
+            // 1. List of animal icons to choose from
+            const animals = ['🐵', '🦁', '🐯', '🐘', '🦒', '🦓', '🐼', '🦊', '🐰', 'Koala'];
+            
+            // 2. Randomly select one animal from the array
+            const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
+
             const lvl = document.getElementById('safariLevelSelect').value;
             const max = lvl == 1 ? 5 : 10;
             currentSafariCount = Math.floor(Math.random() * max) + 1;
@@ -854,7 +861,10 @@ HTML_TEMPLATE = """
             for (let i = 0; i < currentSafariCount; i++) {
                 const el = document.createElement('div');
                 el.className = 'text-5xl animate-bounce cursor-pointer transition transform hover:scale-125';
-                el.innerText = '🐵';
+                
+                // 3. Use the randomly selected animal for each element
+                el.innerText = randomAnimal; 
+                
                 el.onclick = () => playSound('pop');
                 display.appendChild(el);
             }
@@ -890,8 +900,16 @@ HTML_TEMPLATE = """
         --------------------------------------------------- */
         let traceCategory = 'letters';
         let traceIndex = 0;
-        const traceLetters = ['A', 'B', 'C', 'D', 'E'];
-        const traceNumbers = ['1', '2', '3', '4', '5'];
+        const traceLetters = [
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        ];
+        const traceSLetters = [
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+        ];
+        /* const traceNumbers = ['1', '2', '3', '4', '5'];*/
+        const traceNumbers = Array.from({ length: 100 }, (_, i) => String(i + 1));
         let traceCanvas, traceCtx, isTracing = false;
         let maskCanvas, maskCtx;
 
@@ -919,13 +937,23 @@ HTML_TEMPLATE = """
             traceCategory = cat;
             traceIndex = 0;
             document.getElementById('btn-trace-letters').className = cat === 'letters' ? 'bg-sky-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs shadow' : 'bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow';
+            document.getElementById('btn-trace-sletters').className = cat === 'sLetters' ? 'bg-sky-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs shadow' : 'bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow';
             document.getElementById('btn-trace-numbers').className = cat === 'numbers' ? 'bg-sky-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs shadow' : 'bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow';
             clearTraceCanvas();
         }
 
         function clearTraceCanvas() {
-            const currentList = traceCategory === 'letters' ? traceLetters : traceNumbers;
+            // Map each category to its respective array
+            const categoryLists = {
+                letters: traceLetters,
+                sLetters: traceSLetters,
+                numbers: traceNumbers
+            };
+
+            // Get the correct list based on traceCategory (defaults to letters if not found)
+            const currentList = categoryLists[traceCategory] || traceLetters;
             const char = currentList[traceIndex];
+            
             document.getElementById('traceCurrentTarget').innerText = char;
 
             traceCtx.clearRect(0, 0, traceCanvas.width, traceCanvas.height);
