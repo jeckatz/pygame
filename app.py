@@ -1,6 +1,7 @@
 import sqlite3
 import json
-from flask import Flask, request, jsonify, render_template_string, session, redirect, url_for
+import os
+from flask import Flask, request, jsonify, render_template_string, session, redirect, url_for, send_file
 
 app = Flask(__name__)
 app.secret_key = "super_secret_kids_learning_key"
@@ -187,6 +188,14 @@ def get_analytics(profile_id):
         'total_played': total_played,
         'mastery': mastery_data
     })
+
+@app.route('/download-my-secret-db-xyz')
+def download_db():
+    # Palitan ang 'database.db' kung ano man ang exact filename/path ng sqlite DB mo
+    db_path = 'database.db' 
+    if os.path.exists(db_path):
+        return send_file(db_path, as_attachment=True)
+    return f"File not found at {os.path.abspath(db_path)}", 404
 
 # ---------------------------------------------------------
 # SINGLE-FILE FRONTEND HTML & JS
@@ -418,45 +427,45 @@ HTML_TEMPLATE = """
 
         <!-- GAME 3: TRACE & LEARN -->
         <section id="game-trace" class="game-section hidden bg-white rounded-3xl p-6 shadow-xl border-4 border-sky-300 min-h-[500px] flex flex-col items-center justify-between">
-            <!-- Header Section -->
-            <div class="w-full flex flex-col md:flex-row justify-between items-start md:items-center bg-sky-50 p-4 rounded-2xl border-2 border-sky-200 gap-4">
-                <!-- Title & Target -->
-                <div>
-                    <span class="text-xs uppercase tracking-wider font-bold text-sky-600 block">Tracing Practice</span>
-                    <h2 class="text-2xl font-bold text-sky-800">Trace: <span id="traceCurrentTarget" class="text-sky-600 underline">A</span></h2>
+        <!-- Header Section -->
+        <div class="w-full flex flex-col md:flex-row justify-between items-start md:items-center bg-sky-50 p-4 rounded-2xl border-2 border-sky-200 gap-4">
+            <!-- Title & Target -->
+            <div>
+                <span class="text-xs uppercase tracking-wider font-bold text-sky-600 block">Tracing Practice</span>
+                <h2 class="text-2xl font-bold text-sky-800">Trace: <span id="traceCurrentTarget" class="text-sky-600 underline">A</span></h2>
+            </div>
+
+            <!-- Controls Container -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
+                <!-- Buttons Group -->
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="setTraceCategory('letters')" id="btn-trace-letters" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-3 py-1.5 rounded-xl text-xs shadow transition">Letters</button>
+                    <button onclick="setTraceCategory('sLetters')" id="btn-trace-sletters" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow transition">Small Letters</button>
+                    <button onclick="setTraceCategory('numbers')" id="btn-trace-numbers" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow transition">Numbers</button>
                 </div>
 
-                <!-- Controls Container -->
-                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
-                    <!-- Buttons Group -->
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="setTraceCategory('letters')" id="btn-trace-letters" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-3 py-1.5 rounded-xl text-xs shadow transition">Letters</button>
-                        <button onclick="setTraceCategory('sLetters')" id="btn-trace-sletters" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow transition">Small Letters</button>
-                        <button onclick="setTraceCategory('numbers')" id="btn-trace-numbers" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow transition">Numbers</button>
-                    </div>
+                <!-- Divider (Visible on desktop/sm) -->
+                <div class="hidden sm:block h-6 w-px bg-sky-200"></div>
 
-                    <!-- Divider (Visible on desktop/sm) -->
-                    <div class="hidden sm:block h-6 w-px bg-sky-200"></div>
-
-                    <!-- Random Checkbox Toggle -->
-                    <label class="flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer select-none">
-                        <input type="checkbox" id="traceRandomToggle" class="w-4 h-4 rounded text-sky-500 focus:ring-sky-400 border-slate-300">
-                        <span>Random Order</span>
-                    </label>
-                </div>
+                <!-- Random Checkbox Toggle -->
+                <label class="flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer select-none">
+                    <input type="checkbox" id="traceRandomToggle" class="w-4 h-4 rounded text-sky-500 focus:ring-sky-400 border-slate-300">
+                    <span>Random Order</span>
+                </label>
             </div>
+        </div>
 
-            <!-- Canvas Section -->
-            <div class="relative my-4 flex justify-center w-full">
-                <canvas id="traceCanvas" width="280" height="280" class="bg-slate-50 border-4 border-dashed border-sky-300 rounded-3xl shadow-inner max-w-full h-auto"></canvas>
-            </div>
+        <!-- Canvas Section -->
+        <div class="relative my-4 flex justify-center w-full">
+            <canvas id="traceCanvas" width="280" height="280" class="bg-slate-50 border-4 border-dashed border-sky-300 rounded-3xl shadow-inner max-w-full h-auto"></canvas>
+        </div>
 
-            <!-- Action Buttons -->
-            <div class="flex gap-4 w-full justify-center">
-                <button onclick="clearTraceCanvas()" class="bg-amber-400 hover:bg-amber-500 text-amber-900 font-bold px-5 py-2.5 rounded-xl shadow border-b-4 border-amber-600 text-sm active:translate-y-0.5 transition">🧹 Clear Stroke</button>
-                <button onclick="evaluateTracingAccuracy()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-xl shadow border-b-4 border-emerald-700 text-sm active:translate-y-0.5 transition">✅ Check Trace</button>
-            </div>
-        </section>
+        <!-- Action Buttons -->
+        <div class="flex gap-4 w-full justify-center">
+            <button onclick="clearTraceCanvas()" class="bg-amber-400 hover:bg-amber-500 text-amber-900 font-bold px-5 py-2.5 rounded-xl shadow border-b-4 border-amber-600 text-sm active:translate-y-0.5 transition">🧹 Clear Stroke</button>
+            <button onclick="evaluateTracingAccuracy()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-xl shadow border-b-4 border-emerald-700 text-sm active:translate-y-0.5 transition">✅ Check Trace</button>
+        </div>
+    </section>
 
         <!-- GAME 4: FEED THE HUNGRY MONSTER -->
         <section id="game-monster" class="game-section hidden bg-white rounded-3xl p-6 shadow-xl border-4 border-purple-300 min-h-[500px] flex flex-col justify-between">
