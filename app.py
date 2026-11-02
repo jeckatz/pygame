@@ -418,32 +418,43 @@ HTML_TEMPLATE = """
 
         <!-- GAME 3: TRACE & LEARN -->
         <section id="game-trace" class="game-section hidden bg-white rounded-3xl p-6 shadow-xl border-4 border-sky-300 min-h-[500px] flex flex-col items-center justify-between">
-            <div class="w-full flex justify-between items-center bg-sky-50 p-4 rounded-2xl border-2 border-sky-200">
+            <!-- Header Section -->
+            <div class="w-full flex flex-col md:flex-row justify-between items-start md:items-center bg-sky-50 p-4 rounded-2xl border-2 border-sky-200 gap-4">
+                <!-- Title & Target -->
                 <div>
-                    <span class="text-xs uppercase tracking-wider font-bold text-sky-600">Tracing Practice</span>
+                    <span class="text-xs uppercase tracking-wider font-bold text-sky-600 block">Tracing Practice</span>
                     <h2 class="text-2xl font-bold text-sky-800">Trace: <span id="traceCurrentTarget" class="text-sky-600 underline">A</span></h2>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="setTraceCategory('letters')" id="btn-trace-letters" class="bg-sky-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs shadow">Letters</button>
-                    <button onclick="setTraceCategory('sLetters')" id="btn-trace-sletters" class="bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow">Small Letters</button>
-                    <button onclick="setTraceCategory('numbers')" id="btn-trace-numbers" class="bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow">Numbers</button>
-                    <br>
-                    <hr>
+
+                <!-- Controls Container -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
+                    <!-- Buttons Group -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="setTraceCategory('letters')" id="btn-trace-letters" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-3 py-1.5 rounded-xl text-xs shadow transition">Letters</button>
+                        <button onclick="setTraceCategory('sLetters')" id="btn-trace-sletters" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow transition">Small Letters</button>
+                        <button onclick="setTraceCategory('numbers')" id="btn-trace-numbers" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-1.5 rounded-xl text-xs shadow transition">Numbers</button>
+                    </div>
+
+                    <!-- Divider (Visible on desktop/sm) -->
+                    <div class="hidden sm:block h-6 w-px bg-sky-200"></div>
+
                     <!-- Random Checkbox Toggle -->
                     <label class="flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer select-none">
-                        <input type="checkbox" id="traceRandomToggle" class="w-4 h-4 rounded text-sky-500 focus:ring-sky-400">
+                        <input type="checkbox" id="traceRandomToggle" class="w-4 h-4 rounded text-sky-500 focus:ring-sky-400 border-slate-300">
                         <span>Random Order</span>
                     </label>
                 </div>
             </div>
 
-            <div class="relative my-4 flex justify-center">
-                <canvas id="traceCanvas" width="280" height="280" class="bg-slate-50 border-4 border-dashed border-sky-300 rounded-3xl shadow-inner"></canvas>
+            <!-- Canvas Section -->
+            <div class="relative my-4 flex justify-center w-full">
+                <canvas id="traceCanvas" width="280" height="280" class="bg-slate-50 border-4 border-dashed border-sky-300 rounded-3xl shadow-inner max-w-full h-auto"></canvas>
             </div>
 
+            <!-- Action Buttons -->
             <div class="flex gap-4 w-full justify-center">
-                <button onclick="clearTraceCanvas()" class="bg-amber-400 hover:bg-amber-500 text-amber-900 font-bold px-5 py-2.5 rounded-xl shadow border-b-4 border-amber-600 text-sm">🧹 Clear Stroke</button>
-                <button onclick="evaluateTracingAccuracy()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-xl shadow border-b-4 border-emerald-700 text-sm">✅ Check Trace</button>
+                <button onclick="clearTraceCanvas()" class="bg-amber-400 hover:bg-amber-500 text-amber-900 font-bold px-5 py-2.5 rounded-xl shadow border-b-4 border-amber-600 text-sm active:translate-y-0.5 transition">🧹 Clear Stroke</button>
+                <button onclick="evaluateTracingAccuracy()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-xl shadow border-b-4 border-emerald-700 text-sm active:translate-y-0.5 transition">✅ Check Trace</button>
             </div>
         </section>
 
@@ -882,7 +893,7 @@ HTML_TEMPLATE = """
             display.innerHTML = ''; options.innerHTML = '';
 
             // 1. List of animal icons to choose from
-            const animals = ['🐵', '🦁', '🐯', '🐘', '🦒', '🦓', '🐼', '🦊', '🐰', 'Koala'];
+            const animals = ['🐵', '🦁', '🐯', '🐘', '🦒', '🦓', '🐼', '🦊', '🐰'];
             
             // 2. Randomly select one animal from the array
             const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
