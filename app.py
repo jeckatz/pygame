@@ -624,6 +624,7 @@ HTML_TEMPLATE = """
             } else {
                 authBtn.innerText = '🔑 Login';
                 authBtn.onclick = openAuthModal;
+                document.getElementById('starCount').innerText=0;
                 document.getElementById('profileSelectContainer').classList.add('hidden');
             }
         }
