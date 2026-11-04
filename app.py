@@ -205,18 +205,8 @@ def index():
 
     if 'user_id' not in session:
         return render_template('index.html', session=session, auth_error=None)
-    with get_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM children WHERE user_id = ?', (session['user_id'],))
-        children = cursor.fetchall()
-        current_child = None
-        if 'child_id' in session:
-            cursor.execute('SELECT * FROM children WHERE id = ? AND user_id = ?', (session['child_id'], session['user_id']))
-            current_child = cursor.fetchone()
-        if not current_child and children:
-            current_child = children[0]
-            session['child_id'] = current_child['id']
-    return render_template('index.html', session=session, children=children, current_child=current_child, auth_error=None)
+   
+    return render_template('index.html', auth_error=None)
 
 # ---------------------------------------------------------
 # APPLICATION ENTRY POINT
